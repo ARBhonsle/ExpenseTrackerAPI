@@ -14,7 +14,7 @@
 	<name>ExpenseTracker</name>
 	<description>REST API for tracking expenses</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>16</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
