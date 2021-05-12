@@ -1,7 +1,7 @@
 package com.pairlearn.ExpenseTracker.repositories;
 
-import java.beans.Statement;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 import com.pairlearn.ExpenseTracker.domain.User;
 import com.pairlearn.ExpenseTracker.exceptions.EtAuthException;
@@ -35,7 +35,7 @@ public class UserRepositoryImpl implements UserRepository {
                 ps.setString(4, password);
                 return ps;
             },keyHolder);
-                return (Integer) keyHolder.getKey().get("USER_ID");
+                return (Integer) keyHolder.getKeys().get("USER_ID");
         } catch(Exception e){
             throw new EtAuthException("Invalid Details. Failed to create Account");
         }
@@ -56,6 +56,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findById(Integer userId) {
         // TODO Auto-generated method stub
+        //return jdbcTemplate.queryForObject(SQL_FIND_BY_ID, userId, userRowMapper);
         return null;
     }
     
