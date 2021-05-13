@@ -21,14 +21,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> fetchAllCategories(Integer userId) {
-        // TODO Auto-generated method stub
-        return null;
+        return categoryRespository.findAll(userId);
     }
 
     @Override
     public Category fetchCategoryById(Integer userId, Integer categoryId) throws EtResourceNotFoundException {
-        // TODO Auto-generated method stub
-        return null;
+        return categoryRespository.findById(userId, categoryId);
     }
 
     @Override
