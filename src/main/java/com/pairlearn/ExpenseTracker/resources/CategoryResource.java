@@ -1,5 +1,6 @@
 package com.pairlearn.ExpenseTracker.resources;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +43,17 @@ public class CategoryResource {
         String description = (String) categoryMap.get("description");
         Category category = categoryService.addCategory(userId, title, description);
         return new ResponseEntity<>(category, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{categoryId}")
+    public ResponseEntity<Map<String, Boolean>> updateCategory(HttpServletRequest request,
+                                                                @PathVariable("categoryId") Integer categoryId,
+                                                                @RequestBody Category category ){
+        int userId = (Integer) request.getAttribute("userId");
+        categoryService.updateCategory(userId, categoryId, category);
+        Map<String, Boolean> map= new HashMap<>();
+        map.put("success", true);
+        return new ResponseEntity<>( map, HttpStatus.OK);
     }
 
 }

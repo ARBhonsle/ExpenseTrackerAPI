@@ -37,8 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void updateCategory(Integer userId, Integer categoryId, Category category) throws EtBadRequestExeption {
-        // TODO Auto-generated method stub
-        
+        categoryRespository.update(userId, categoryId, category);        
     }
 
     @Override
