@@ -8,8 +8,7 @@ public class Transaction {
     private String note;
     private Long transactionDate;
 
-    public Transaction(Integer transactionId, Integer categoryId, Integer userId, Double amount, String note, Long transactionDate){
-        
+    public Transaction(Integer transactionId, Integer categoryId, Integer userId, Double amount, String note, Long transactionDate){        
         this.transactionId= transactionId;
         this.categoryId=categoryId;
         this.userId=userId;

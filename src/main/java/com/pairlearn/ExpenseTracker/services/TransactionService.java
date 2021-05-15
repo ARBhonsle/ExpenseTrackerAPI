@@ -9,7 +9,8 @@ import com.pairlearn.ExpenseTracker.exceptions.EtResourceNotFoundException;
 
 public interface TransactionService {
     List<Transaction> fetchAllTransactions(Integer userId, Integer categoryId);
-    Transaction addTransaction(Integer userId, Integer categoryId, Double amount, String note, Long transactionDate) throws EtResourceNotFoundException;
-    Transaction updateTransaction(Integer userId, Integer categoryId, Integer transactionId, Transaction transaction) throws EtBadRequestExeption;
+    Transaction fetchTransactionById(Integer userId, Integer categoryId, Integer transactionId) throws EtResourceNotFoundException;
+    Transaction addTransaction(Integer userId, Integer categoryId, Double amount, String note, Long transactionDate) throws EtBadRequestExeption;
+    void updateTransaction(Integer userId, Integer categoryId, Integer transactionId, Transaction transaction) throws EtBadRequestExeption;
     void removeTransaction(Integer userId, Integer categoryId, Integer transactionId) throws EtResourceNotFoundException;
 }

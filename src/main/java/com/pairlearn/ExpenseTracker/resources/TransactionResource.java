@@ -1,5 +1,7 @@
 package com.pairlearn.ExpenseTracker.resources;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,8 +12,10 @@ import com.pairlearn.ExpenseTracker.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +25,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class TransactionResource {
     @Autowired
     TransactionService transactionService;
+
+    @GetMapping("")
+    public ResponseEntity<List<Transaction>> getAllTransactions(HttpServletRequest request,
+                                                                @PathVariable("categoryId") Integer categoryId){
+            int userId = (Integer) request.getAttribute("userId");
+            List<Transaction> transaction = transactionService.fetchAllTransactions(userId, categoryId);
+            return new ResponseEntity<>(transaction,HttpStatus.OK);
+            
+
+    }
+
+    @GetMapping("/{transactionId}")
+    public ResponseEntity<Transaction> getTransactionById(HttpServletRequest request,
+                                                            @PathVariable("categoryId") Integer categoryId,
+                                                            @PathVariable("transactionId") Integer transactionId){
+            int userId= (Integer) request.getAttribute("userId");
+            Transaction transaction = transactionService.fetchTransactionById(userId, categoryId, transactionId);
+            return new ResponseEntity<>(transaction, HttpStatus.OK);
+    }
 
     @PostMapping("")
     public ResponseEntity<Transaction> addTransaction(HttpServletRequest request,
@@ -33,4 +56,7 @@ public class TransactionResource {
         Transaction transaction = transactionService.addTransaction(userId, categoryId, amount, note, transactionDate);
         return new ResponseEntity<>(transaction, HttpStatus.CREATED);
     }
+
+   
+
 }

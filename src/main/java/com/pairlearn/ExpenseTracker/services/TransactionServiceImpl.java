@@ -20,29 +20,34 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<Transaction> fetchAllTransactions(Integer userId, Integer categoryId) {
-        // TODO Auto-generated method stub
-        return null;
+        return transactionRepository.findAll(userId, categoryId);
+    }
+
+    @Override
+    public Transaction fetchTransactionById(Integer userId, Integer categoryId, Integer transactionId)
+            throws EtResourceNotFoundException {
+                return transactionRepository.findById(userId,categoryId,transactionId);        
     }
 
     @Override
     public Transaction addTransaction(Integer userId, Integer categoryId, Double amount, String note,
-            Long transactionDate) throws EtResourceNotFoundException {
+            Long transactionDate) throws EtBadRequestExeption {
         int transactionId= transactionRepository.create(userId, categoryId, amount, note, transactionDate);
         return transactionRepository.findById(userId, categoryId, transactionId);
     }
 
     @Override
-    public Transaction updateTransaction(Integer userId, Integer categoryId, Integer transactionId,
+    public void updateTransaction(Integer userId, Integer categoryId, Integer transactionId,
             Transaction transaction) throws EtBadRequestExeption {
-        // TODO Auto-generated method stub
-        return null;
+               
     }
 
     @Override
     public void removeTransaction(Integer userId, Integer categoryId, Integer transactionId)
             throws EtResourceNotFoundException {
-        // TODO Auto-generated method stub
+                transactionRepository.removeById(userId, categoryId, transactionId);
         
     }
+
     
 }
