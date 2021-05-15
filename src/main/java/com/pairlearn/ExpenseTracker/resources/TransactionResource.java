@@ -12,13 +12,7 @@ import com.pairlearn.ExpenseTracker.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/categories/{categoryId}/transactions")
@@ -57,6 +51,29 @@ public class TransactionResource {
         return new ResponseEntity<>(transaction, HttpStatus.CREATED);
     }
 
-   
+    @PutMapping("/{transactionId}")
+    public ResponseEntity<Map<String, Boolean>> updateTransaction(HttpServletRequest request,
+                                                                 @PathVariable("categoryId") Integer categoryId,
+                                                                 @PathVariable("transactionId") Integer transactionId,
+                                                                 @RequestBody Transaction transaction){
+            int userId= (Integer) request.getAttribute("userId");
+            transactionService.updateTransaction(userId, categoryId, transactionId, transaction);
+            Map<String, Boolean> map = new HashMap<>();
+            map.put("success", true);
+            return new ResponseEntity<>(map,HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{transactionId}")
+    public ResponseEntity<Map<String, Boolean>> deleteTransaction(HttpServletRequest request,
+                                                                    @PathVariable("categoryId") Integer categoryId,
+                                                                    @PathVariable("transactionId") Integer transactionId){
+            int userId=(Integer) request.getAttribute("userId");
+            transactionService.removeTransaction(userId, categoryId, transactionId);
+            Map<String, Boolean> map= new HashMap<>();
+            map.put("success", true);
+            return new ResponseEntity<>(map,HttpStatus.OK);
+    
+
+    }
 
 }

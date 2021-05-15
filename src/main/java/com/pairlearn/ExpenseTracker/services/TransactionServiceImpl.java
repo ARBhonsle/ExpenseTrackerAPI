@@ -39,15 +39,13 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void updateTransaction(Integer userId, Integer categoryId, Integer transactionId,
             Transaction transaction) throws EtBadRequestExeption {
-               
+                transactionRepository.update(userId, categoryId, transactionId, transaction);
     }
 
     @Override
     public void removeTransaction(Integer userId, Integer categoryId, Integer transactionId)
             throws EtResourceNotFoundException {
                 transactionRepository.removeById(userId, categoryId, transactionId);
-        
     }
 
-    
 }

@@ -21,6 +21,8 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     private static final String SQL_FIND_ALL= "SELECT TRANSACTION_ID, CATEGORY_ID, USER_ID, AMOUNT, NOTE, TRANSACTION_DATE FROM ET_TRANSACTIONS WHERE USER_ID = ? AND CATEGORY_ID = ?";
     private static final String SQL_FIND_BY_ID="SELECT TRANSACTION_ID, CATEGORY_ID, USER_ID, AMOUNT, NOTE, TRANSACTION_DATE FROM ET_TRANSACTIONS WHERE USER_ID = ? AND CATEGORY_ID = ? AND TRANSACTION_ID = ?";
     private static final String SQL_CREATE="INSERT INTO ET_TRANSACTIONS (TRANSACTION_ID, CATEGORY_ID, USER_ID, AMOUNT, NOTE, TRANSACTION_DATE) VALUES(NEXTVAL('ET_TRANSACTIONS_SEQ'), ?, ?, ?, ?, ?)";
+    private static final String SQL_UPDATE="UPDATE ET_TRANSACTIONS SET AMOUNT =?, NOTE = ?, TRANSACTION_DATE= ? WHERE USER_ID = ? AND CATEGORY_ID =? AND TRANSACTION_ID = ?";
+    private static final String SQL_DELETE="DELETE FROM ET_TRANSACTIONS WHERE USER_ID =? AND CATEGORY_ID = ? AND TRANSACTION_ID = ?";
     
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -57,29 +59,35 @@ public class TransactionRepositoryImpl implements TransactionRepository {
             }, keyHolder);
             return (Integer) keyHolder.getKeys().get("TRANSACTION_ID");
         } catch (Exception e) {
-           throw new EtBadRequestExeption(" Invalid Transaction Request");
+           throw new EtBadRequestExeption("Invalid Transaction Request");
         }
     }
 
     @Override
     public void update(Integer userId, Integer categoryId, Integer transactionId, Transaction transaction)
             throws EtBadRequestExeption {
-        
+        try {
+            jdbcTemplate.update(SQL_UPDATE, userId, categoryId, transactionId, transaction.getAmount(), transaction.getNote(), transaction.getTransactionDate());
+        } catch (Exception e) {
+            throw new EtBadRequestExeption("Invalid Transaction Request");
+        }
     }
 
     @Override
     public void removeById(Integer userId, Integer categoryId, Integer transactionId)
             throws EtResourceNotFoundException {
-        // TODO Auto-generated method stub
-        
+                int count = jdbcTemplate.update(SQL_DELETE, userId, categoryId, transactionId);
+                if(count == 0){
+                    throw new EtResourceNotFoundException("Transaction not found");
+                }  
     }
 
     private RowMapper<Transaction> transactionRowMapper = ((rs, rowNum)->{
         return new Transaction(rs.getInt("TRANSACTION_ID"),
-        rs.getInt("CATEGORY_ID"),
-        rs.getInt("USER_ID"),
-        rs.getDouble("AMOUNT"),
-        rs.getString("NOTE"),
-        rs.getLong("TRANSACTION_DATE"));
+            rs.getInt("CATEGORY_ID"),
+            rs.getInt("USER_ID"),
+            rs.getDouble("AMOUNT"),
+            rs.getString("NOTE"),
+            rs.getLong("TRANSACTION_DATE"));
     });   
 }

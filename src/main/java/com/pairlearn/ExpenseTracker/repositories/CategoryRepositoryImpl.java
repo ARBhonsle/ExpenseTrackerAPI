@@ -28,7 +28,9 @@ public class CategoryRepositoryImpl implements CategoryRespository{
             "WHERE C.USER_ID = ? AND C.CATEGORY_ID = ? GROUP BY C.CATEGORY_ID";
     private static final String SQL_CREATE = "INSERT INTO ET_CATEGORIES (CATEGORY_ID, USER_ID, TITLE, DESCRIPTION) VALUES(NEXTVAL('ET_CATEGORIES_SEQ'), ?, ?, ?)";
     private static final String SQL_UPDATE="UPDATE ET_CATEGORIES SET TITLE = ?, DESCRIPTION = ? "+ "WHERE USER_ID = ? AND CATEGORY_ID = ?";
-
+    private static final String SQL_DELETE_CATEGORY="DELETE FROM ET_CATEGORIES WHERE USER_ID = ? AND CATEGORY_ID = ?";
+    private static final String SQL_DELETE_ALL_TRANSACTIONS="DELETE FROM ET_TRANSACTIONS WHERE CATEGORY_ID = ?";
+    
     @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -74,8 +76,12 @@ public class CategoryRepositoryImpl implements CategoryRespository{
 
     @Override
     public void removeById(Integer userId, Integer categoryId) {
-        // TODO Auto-generated method stub
-        
+        this.removeAllCAtTransactions(categoryId);
+        jdbcTemplate.update(SQL_DELETE_CATEGORY, userId, categoryId);
+    }
+
+    private void removeAllCAtTransactions(Integer categoryId){
+        jdbcTemplate.update(SQL_DELETE_ALL_TRANSACTIONS, categoryId);
     }
 
     private RowMapper<Category> categoryRowMapper = ((rs, rowNum)-> {
