@@ -21,7 +21,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     private static final String SQL_FIND_ALL= "SELECT TRANSACTION_ID, CATEGORY_ID, USER_ID, AMOUNT, NOTE, TRANSACTION_DATE FROM ET_TRANSACTIONS WHERE USER_ID = ? AND CATEGORY_ID = ?";
     private static final String SQL_FIND_BY_ID="SELECT TRANSACTION_ID, CATEGORY_ID, USER_ID, AMOUNT, NOTE, TRANSACTION_DATE FROM ET_TRANSACTIONS WHERE USER_ID = ? AND CATEGORY_ID = ? AND TRANSACTION_ID = ?";
     private static final String SQL_CREATE="INSERT INTO ET_TRANSACTIONS (TRANSACTION_ID, CATEGORY_ID, USER_ID, AMOUNT, NOTE, TRANSACTION_DATE) VALUES(NEXTVAL('ET_TRANSACTIONS_SEQ'), ?, ?, ?, ?, ?)";
-    private static final String SQL_UPDATE="UPDATE ET_TRANSACTIONS SET AMOUNT =?, NOTE = ?, TRANSACTION_DATE= ? WHERE USER_ID = ? AND CATEGORY_ID =? AND TRANSACTION_ID = ?";
+    private static final String SQL_UPDATE="UPDATE ET_TRANSACTIONS SET AMOUNT = ?, NOTE = ?, TRANSACTION_DATE = ? WHERE USER_ID = ? AND CATEGORY_ID = ? AND TRANSACTION_ID = ?";
     private static final String SQL_DELETE="DELETE FROM ET_TRANSACTIONS WHERE USER_ID =? AND CATEGORY_ID = ? AND TRANSACTION_ID = ?";
     
     @Autowired
@@ -67,7 +67,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     public void update(Integer userId, Integer categoryId, Integer transactionId, Transaction transaction)
             throws EtBadRequestExeption {
         try {
-            jdbcTemplate.update(SQL_UPDATE, userId, categoryId, transactionId, transaction.getAmount(), transaction.getNote(), transaction.getTransactionDate());
+            jdbcTemplate.update(SQL_UPDATE, transactionId,transaction.getAmount(),userId, categoryId, transaction.getNote(), transaction.getTransactionDate());
         } catch (Exception e) {
             throw new EtBadRequestExeption("Invalid Transaction Request");
         }
